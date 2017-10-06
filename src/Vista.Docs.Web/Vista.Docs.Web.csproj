@@ -330,6 +330,7 @@
     <Content Include="Config\Lang\zh-CN.user.xml" />
     <Content Include="Config\Splashes\booting.aspx" />
     <Content Include="Config\Splashes\noNodes.aspx" />
+    <Content Include="css\umbraco-starterkit-style.css" />
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
     <Content Include="images\vistahands.png" />
@@ -354,7 +355,7 @@
     <Content Include="Config\tinyMceConfig.config" />
     <Content Include="Config\trees.config" />
     <Content Include="Config\umbracoSettings.config" />
-    <Content Include="styles\Base.scss" />
+    <Content Include="css\base.scss" />
     <Content Include="Views\Blog.cshtml" />
     <Content Include="Views\Blogpost.cshtml" />
     <Content Include="Views\Contact.cshtml" />

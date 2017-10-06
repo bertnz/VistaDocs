@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vista.Docs.App", "Vista.Doc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vista.Docs.Web", "Vista.Docs.Web\Vista.Docs.Web.csproj", "{C00944DE-C892-46FB-9D65-6EFA76CC3DCA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{BBBA627B-8323-468E-919C-F44CBB5CB7EC}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

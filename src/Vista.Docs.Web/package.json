@@ -11,6 +11,10 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
-    "gulp-sass": "^3.1.0"
+    "gulp-csso": "^3.0.0",
+    "gulp-print": "^2.0.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-shell": "^0.6.3",
+    "run-sequence": "^2.2.0"
   }
 }

@@ -6,6 +6,8 @@
 # =========================
 Vista.Docs.Web/App_Data/*
 Vista.Docs.Web/Media/*
+Vista.Docs.Web/assets/*
+Vista.Docs.Web/node_modules/*
 
 # User-specific files
 *.suo
