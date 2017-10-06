@@ -1,0 +1,206 @@
+﻿.vista, body.vista {
+    
+    background-color:#FCFCFC;
+    margin:0;
+    padding:0;
+
+    font-family: "Open Sans",open-sans,sans-serif;
+    -webkit-font-smoothing: antialiased;    
+
+    $a-tags: 'a, a:active, a:hover, a:visited';
+    $a-tags-hover: 'a:active, a:hover';
+
+
+    #page-header {	
+        height: 60px;
+        opacity: 0.95;	
+        background-color: #FFFFFF;	
+        box-shadow: 0 2px 40px 0 rgba(0,0,0,0.08);
+        display:flex;
+        align-items:center;
+        justify-content:flex-start;
+        flex-direction:row;
+        padding-left:20px;
+
+        .vista-hands {
+            width:30px;
+            margin-right:8px;
+        }
+
+        .page-header-text {
+            white-space:nowrap;
+            margin-left:10px;
+        }
+    }
+
+
+    .page-header-text {	height: 12px;	width: 95px;	color: #667682;	font-family: "Open Sans",open-sans,sans-serif"";	font-size: 12px;	line-height: 12px;}
+
+    h1 {	height: 48px;	color: #2A2D32;	font-family: Open Sans",open-sans,sans-serif";	font-size: 40px;	font-weight: 300;	line-height: 48px;}
+
+    h2 {	height: 28px;	color: #4FB184;	font-family: Open Sans",open-sans,sans-serif";	font-size: 18px;	font-weight: bold;	line-height: 28px;}
+
+
+    .column-layout {
+        display:flex;
+        flex-direction:row;
+        justify-content:center;
+    }
+    .centre-column {
+        width: 542px; 
+        color: #2A2D32;	
+        font-size: 16px;	
+        line-height: 30px;
+        margin-bottom:50px;
+    }
+
+    .menu-column {
+        margin-top:91px;
+        width:200px;
+        margin-left:100px;
+
+
+        h3 {
+	        height: 28px;
+	        width: 70px;
+	        color: #2A2D32;
+	        font-size: 12px;
+	        line-height: 28px;
+            text-transform:uppercase;
+        }
+
+        ul {
+            padding-left:15px;
+            list-style-type: none;
+            border-left:solid 3px #d8d8d8;
+
+            #{$a-tags},#{$a-tags-hover}  {
+
+	            height: 150px;
+	            width: 91px;
+	            color: #4FB184;
+	            font-size: 16px;
+	            line-height: 30px;
+                text-decoration:none;
+                border-bottom:none;
+            }
+        }
+    }
+
+    table {
+        border-collapse:collapse;
+        border:none;
+        width:100%;
+        th {
+            text-align:left;
+	        height: 30px;
+	        width: 35px;
+	        color: #72757B;
+	        font-size: 13px;
+	        font-weight: bold;
+	        line-height: 30px;
+        }
+
+        td {
+            font-size: 16px;
+        }
+        td {
+            padding:10px;
+        }
+        th,td {
+            padding-left:15px;        
+        }
+
+
+        tr {
+        }
+
+        tr:nth-child(odd) {
+        }
+        tr:nth-child(even) {
+
+            background-color: rgba(#D8D8D8,0.2);        
+        }
+    }
+
+
+    .call-flow {	
+	    border: 1px solid #DCD6D6;
+	    border-radius: 3px;
+	    background-color: rgba(240,240,240,0.15);
+	    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+        margin-bottom:15px;
+
+        .call-flow-title {
+            margin:0;
+            padding:10px;
+	        border-radius: 2px 0 0 2px;
+	        background-color: #42B285;
+            display:block;
+	        color: #FFFFFF;
+	        font-size: 16px;
+	        line-height: 16px;
+            cursor:pointer;
+        }
+
+        .call-flow-description {
+            padding:10px;
+            font-size:14px;
+            font-style:italic;
+        }
+
+        .flow-diagram {
+            padding:10px;
+            padding-bottom:8px;        
+            display:none;      
+
+            .flow-step {
+                display:flex;
+                flex-direction:row;
+                justify-content:flex-start;
+                border-bottom:solid 2px rgba(#D8D8D8,0.2);
+
+                .step-number {
+                    display:inline-block;
+                    width:21px;
+                    height:21px;
+                    border-radius:14px;
+                    line-height:22px;
+                    text-align:center;
+                    color:white;
+                    margin:0;
+                    padding:0;
+                    font-size:12px;
+                    background-color:#DCD6D6;
+                    margin-right:10px;
+                    margin-top:4px;
+                }
+
+                .flow-step-details {
+                    display:inline-block;
+                }
+
+                &:last-child {
+                    border-bottom:none;
+                }
+
+                .flow-step-additional-info {
+                    font-size:12px;
+                    font-style:italic;
+                    display:block;
+
+                }
+            }
+        }
+
+
+    }
+
+}
+
+#swagger-ui
+{
+    .topbar,.information-container {
+        display:none;
+    }
+}
