@@ -4,7 +4,11 @@
 # =========================
 # Umbraco
 # =========================
-Vista.Docs.Web/App_Data/*
+Vista.Docs.Web/App_Data/cache
+Vista.Docs.Web/App_Data/Preview
+Vista.Docs.Web/App_Data/Temp
+Vista.Docs.Web/App_Data/Logs
+Vista.Docs.Web/App_Data/NuGetBackup
 Vista.Docs.Web/Media/*
 Vista.Docs.Web/assets/*
 Vista.Docs.Web/node_modules/*

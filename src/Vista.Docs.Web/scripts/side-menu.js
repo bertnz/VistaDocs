@@ -1,4 +1,5 @@
 ﻿$('#side-menu-tree').treeview({
     data: sideMenuJson,
-    levels: 2
+    levels: 20,
+    enableLinks:true
 });

@@ -329,7 +329,6 @@
     <Content Include="Config\Lang\zh-CN.user.xml" />
     <Content Include="Config\Splashes\booting.aspx" />
     <Content Include="Config\Splashes\noNodes.aspx" />
-    <Content Include="css\umbraco-starterkit-style.css" />
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
     <Content Include="images\vistahands.png" />
@@ -387,6 +386,10 @@
     <Content Include="Views\SiteHome.cshtml" />
     <Content Include="Views\SiteMaster.cshtml" />
     <Content Include="Views\Partials\Navigation\SideNavigation.cshtml" />
+    <Content Include="Views\MarkdownPageSingle.cshtml" />
+    <Content Include="Views\APIHome.cshtml" />
+    <Content Include="App_Data\Models\all.dll.path" />
+    <Content Include="App_Data\Models\models.hash" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -405,6 +408,14 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Data\Models\APihome.generated.cs" />
+    <Compile Include="App_Data\Models\File.generated.cs" />
+    <Compile Include="App_Data\Models\Folder.generated.cs" />
+    <Compile Include="App_Data\Models\Image.generated.cs" />
+    <Compile Include="App_Data\Models\MarkdownPageSingle.generated.cs" />
+    <Compile Include="App_Data\Models\Navigation.generated.cs" />
+    <Compile Include="App_Data\Models\SiteHome.generated.cs" />
+    <Compile Include="App_Data\Models\SwaggerUipage.generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

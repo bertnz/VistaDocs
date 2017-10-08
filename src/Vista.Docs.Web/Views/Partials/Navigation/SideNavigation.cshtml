@@ -4,7 +4,7 @@
 @using Newtonsoft.Json.Serialization;
 @{ 
     var rootNode = Model.Content.AncestorOrSelf(1);
-    var menu = Vista.Docs.App.Navigation.SideNavigationBuilder.BuildMenu(rootNode);
+    var menu = Vista.Docs.App.Navigation.SideNavigationBuilder.BuildMenu(rootNode, Model.Content);
     var menuJson = JsonConvert.SerializeObject(menu, new JsonSerializerSettings
     {
         ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -13,4 +13,5 @@
 <script type="text/javascript">
     var sideMenuJson = @Html.Raw(menuJson);
 </script>
+<h1>Documentation</h1>
 <div id="side-menu-tree"></div>
