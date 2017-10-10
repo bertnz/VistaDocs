@@ -355,6 +355,14 @@
     <Content Include="Config\umbracoSettings.config" />
     <Content Include="css\base.scss" />
     <Content Include="scripts\side-menu.js" />
+    <Content Include="swagger-src\favicon-16x16.png" />
+    <Content Include="swagger-src\favicon-32x32.png" />
+    <Content Include="swagger-src\index.html" />
+    <Content Include="swagger-src\oauth2-redirect.html" />
+    <Content Include="swagger-src\swagger-ui-bundle.js" />
+    <Content Include="swagger-src\swagger-ui-standalone-preset.js" />
+    <Content Include="swagger-src\swagger-ui.css" />
+    <Content Include="swagger-src\swagger-ui.js" />
     <Content Include="Views\Blog.cshtml" />
     <Content Include="Views\Blogpost.cshtml" />
     <Content Include="Views\Contact.cshtml" />
@@ -390,6 +398,11 @@
     <Content Include="Views\APIHome.cshtml" />
     <Content Include="App_Data\Models\all.dll.path" />
     <Content Include="App_Data\Models\models.hash" />
+    <Content Include="swagger-src\swagger-ui-bundle.js.map" />
+    <Content Include="swagger-src\swagger-ui-standalone-preset.js.map" />
+    <Content Include="swagger-src\swagger-ui.css.map" />
+    <Content Include="swagger-src\swagger-ui.js.map" />
+    <Content Include="Views\SwaggerUIPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -414,15 +427,21 @@
     <Compile Include="App_Data\Models\Image.generated.cs" />
     <Compile Include="App_Data\Models\MarkdownPageSingle.generated.cs" />
     <Compile Include="App_Data\Models\Navigation.generated.cs" />
+    <Compile Include="App_Data\Models\NewsFeed.generated.cs" />
+    <Compile Include="App_Data\Models\NewsItem.generated.cs" />
     <Compile Include="App_Data\Models\SiteHome.generated.cs" />
     <Compile Include="App_Data\Models\SwaggerUipage.generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="App_Data\Models\SiteHome.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vista.Docs.App\Vista.Docs.App.csproj">
       <Project>{426b6ab9-76c1-46eb-99cd-15b25eab7700}</Project>
       <Name>Vista.Docs.App</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="swagger\connect\5.0.0\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

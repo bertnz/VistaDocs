@@ -2,6 +2,22 @@
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
 	Layout = "SiteMaster.cshtml";
+    var newsFeed = Model.Content.NewsFeed;
 }
 
 @Umbraco.Field("content")
+
+@if (newsFeed != null && newsFeed.Children.Any())
+{
+    var itemsToRender = newsFeed.Children<NewsItem>().OrderByDescending(c => c.CreateDate).Take(10);
+    <div class="news-feed">
+        @foreach (NewsItem newsItem in itemsToRender)
+        {
+            <div class="news-item">
+                <span class="news-item-date">@newsItem.CreateDate.ToString("dd MMM yyyy")</span>
+                <span class="news-item-title">@newsItem.Title</span>
+                <div class="news-item-content">@newsItem.Content</div>
+            </div>
+        }
+    </div>
+}

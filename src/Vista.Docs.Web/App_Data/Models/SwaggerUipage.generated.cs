@@ -46,6 +46,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Operation Filter: Comma-separated list of operations to filter swagger by
+		///</summary>
+		[ImplementPropertyType("operationFilter")]
+		public string OperationFilter
+		{
+			get { return this.GetPropertyValue<string>("operationFilter"); }
+		}
+
+		///<summary>
 		/// Service Overview: Description of service, appears above Swagger UI
 		///</summary>
 		[ImplementPropertyType("serviceOverview")]

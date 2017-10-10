@@ -69,7 +69,7 @@
 
     .centre-column {
         margin-left: 15px;
-        width: 742px;
+        width: 842px;
         color: #2A2D32;
         font-size: 16px;
         line-height: 30px;
@@ -84,18 +84,18 @@
         h1 {
             background-image: url('../images/vistahands.png');
             background-repeat: no-repeat;
-            background-position-x:5px;
+            background-position-x: 5px;
             background-size: contain;
             line-height: 30px;
             height: 30px;
             font-size: 17px;
             padding-left: 50px;
-            margin:0;
-            margin-top:10px;
+            margin: 0;
+            margin-top: 10px;
         }
 
         .treeview {
-            margin-top:15px;
+            margin-top: 15px;
         }
 
 
@@ -116,8 +116,8 @@
         ul {
             padding-left: 5px;
             list-style-type: none;
-            margin:0;
-            padding-left:0;
+            margin: 0;
+            padding-left: 0;
 
 
             #{$a-tags}, #{$a-tags-hover} {
@@ -127,6 +127,28 @@
                 text-decoration: none;
                 border-bottom: none;
             }
+        }
+    }
+
+    .news-feed {
+        .news-item {
+            border: solid 1px #DEE5E6;
+            background-color: #F6F7F9;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .news-item-date {
+            color: #B1B8BF;
+            font-size: 14px;
+            display: inline-block;
+            float: right;
+        }
+
+        .news-item-title {
+            color: #354E65;
+            font-size: larger;
         }
     }
 

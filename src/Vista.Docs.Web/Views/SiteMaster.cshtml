@@ -13,6 +13,7 @@
     <title>Vista Docs</title>
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/swagger-ui.css")" />
     <link rel="stylesheet" href="@Url.Content("~/assets/css/libs.css")" />
     <link rel="stylesheet" href="@Url.Content("~/assets/css/base.css")" />
 
@@ -32,6 +33,8 @@
         </div>
     </div>
     <script src="@Url.Content("~/assets/scripts/libs.js")"></script>
+    @RenderSection("CustomScripts", required: false)
     <script src="@Url.Content("~/assets/scripts/base.js")"></script>
+
 </body>
 </html>

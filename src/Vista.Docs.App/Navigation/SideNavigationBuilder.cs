@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
@@ -13,8 +14,20 @@ namespace Vista.Docs.App.Navigation
             {
                 ancestorIds.Add(ancestor.Id);
             }
-            var childNodes = rootNode.Children;
             List<TreeViewNode> rootNodes = new List<TreeViewNode>();
+
+            //Add home node
+            var homeNode = new TreeViewNode
+            {
+                Href = rootNode.Url,
+                Text = "Home",
+                Selectable = true,
+            };
+            homeNode.State.Selected = rootNode.Id == selectedNode.Id;
+            rootNodes.Add(homeNode);
+
+            var childNodes = rootNode.Children.Where(n => n.Name != "News");
+            //Add other root nodes
             if (childNodes != null)
             {
                 foreach (var childUmbracoNode in childNodes)

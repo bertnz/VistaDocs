@@ -1,0 +1,1314 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "40.0.0.0",
+		"title": "Connect.WebAPI",
+		"description": "If you are looking for an endpoint that is not listed here, please click through to the [Swagger Docs 1](/WSVistaWebClientDev/api-docs/)."
+	},
+	"host": "localhost",
+	"basePath": "/WSVistaWebClientDev",
+	"schemes": ["http"],
+	"paths": {
+		"/cinemas/{cinemaId}/bookings/{bookingId}/refund": {
+			"post": {
+				"tags": ["Bookings"],
+				"summary": "Refund Booking",
+				"description": "Refunds a booking or part of a booking including refund of payment and cancellation of order items at cinema.\r\n\r\nThe **GetSingleBooking** end-point will return the full state of a booking including sequence numbers and can be used to determine what to provide to this end-point. When querying **GetSingleBooking** the **ReturnTransactionStatusInfoIfSingleBookingMatch** should be set to true to ensure the relevant information is returned.\r\n\r\nIndividual tickets, concessions and booking fees can be refunded by **sequence number**. Alternatively, all items can be refunded if no sequence numbers are supplied. Package tickets/concessions must be refunded completely - partial refunds of a ticket package are not supported.\r\n\r\nPayment information is required to match the value of the items being refunded. Payments can be processed by the end-point, or recorded if processed externally.\r\nOnly one payment is currently supported per refund and must be provided as either an **externalPaymentDetails**, **unmatchedPaymentDetails** or **matchedPaymentDetails**        \r\n\r\n#### External Payment Refund\r\n- Providing an **externalPaymentDetails** indicates a refund payment was made in an external system and that the Vista system only needs to record the details              \r\n- While no details are required here additional information such as **BankTransactionNumber**, **BankAuthCode** and **CardNumber** are useful for auditing purposes\r\n- For this type of refund, card numbers should be masked since they are not used to process any payments\r\n\r\n#### Matched Payment Refund\r\n- Providing an **matchedPaymentDetails** indicates an refund payment is to be processed by Vista using the reference/reversal information recorded as part of the original payment        \r\n- Using matched refunds provide a link between the refund payment and the original payment in both the payment system and Vista\r\n- Matched refund payments are more secure than unmatched as they do not require the passing of card numbers into the API\r\n- In order to use matched payment refunds the appropriate reference/reversal data must be stored against the original payment and appropriate **payment connectors** must be available and configured\r\n- See **Ticketing/CompleteOrder** and **Booking/PayForUnPaid** end-points for details on providing necessary data to enable matched refund payments\r\n\r\n#### Unmatched Payment Refund\r\n- Providing an **unmatchedPaymentDetails** indicates the Vista system will process a refund payment using the provided card details\r\n- Unmatched refund payments will be processed at cinema using the payment provider determined by the **CardNumber**\r\n- These payments will not be related to any payments made on order and are thus less secure and less traceable in the Vista system and in other payment systems         \r\n\r\nError codes below are returned in the response body\r\n\r\n- **100** - The selected booking has already been refunded\r\n- **110** - A requested sequence does not exist on the booking\r\n- **120** - A requested sequence has already been refunded\r\n- **130** - The selected booking has already been picked up\r\n- **140** - The selected booking contains one or more sessions where the cut-off time for refunds has past for remote sales channels\r\n- **141** - The selected booking contains one or more sessions where the cut-off time for refunds has past for this client\r\n- **150** - To prevent fraud, there is a five minute delay before you can perform a refund after resending a confirmation email",
+				"operationId": "BookingRefund_Refund",
+				"consumes": ["application/json",
+				"text/json",
+				"application/x-www-form-urlencoded"],
+				"produces": [],
+				"parameters": [{
+					"name": "cinemaId",
+					"in": "path",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"name": "bookingId",
+					"in": "path",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"name": "request",
+					"in": "body",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Bookings.Refunds.RefundBookingRequest"
+					}
+				},
+				{
+					"name": "loyaltySessionToken",
+					"in": "header",
+					"description": "Current loyalty session token represents a 'signed-in' member",
+					"required": false,
+					"type": "string"
+				},
+				{
+					"name": "connectapitoken",
+					"in": "header",
+					"description": "Connect API token",
+					"required": false,
+					"type": "string"
+				}],
+				"responses": {
+					"204": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request with error code listed above"
+					}
+				},
+				"deprecated": false
+			}
+		},
+		"/orders/{userSessionId}": {
+			"get": {
+				"tags": ["Orders"],
+				"summary": "Get Order",
+				"description": "Gets in-progress order for specified userSessionId.",
+				"operationId": "Orders_GetOrder",
+				"consumes": [],
+				"produces": ["application/json",
+				"text/json"],
+				"parameters": [{
+					"name": "userSessionId",
+					"in": "path",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"name": "connectapitoken",
+					"in": "header",
+					"description": "Connect API token",
+					"required": false,
+					"type": "string"
+				}],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.GetOrderResponse"
+						}
+					}
+				},
+				"deprecated": false
+			}
+		},
+		"/orders": {
+			"post": {
+				"tags": ["Orders"],
+				"summary": "Create Order",
+				"description": "Creates new Order.",
+				"operationId": "Orders_CreateOrder",
+				"consumes": ["application/json",
+				"text/json",
+				"application/x-www-form-urlencoded"],
+				"produces": ["application/json",
+				"text/json"],
+				"parameters": [{
+					"name": "request",
+					"in": "body",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Request.CreateOrderRequest"
+					}
+				},
+				{
+					"name": "connectapitoken",
+					"in": "header",
+					"description": "Connect API token",
+					"required": false,
+					"type": "string"
+				}],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.CreateOrderResponse"
+						}
+					}
+				},
+				"deprecated": false
+			}
+		},
+		"/orders/{userSessionId}/sessions/{sessionId}/set-tickets": {
+			"post": {
+				"tags": ["Orders"],
+				"summary": "Set Tickets",
+				"description": "Sets the seats and/or tickets to be ordered for a single session within an order.\r\nThis endpoint can be used for both seat-first and ticket-first ordering. It should be used in place of the **AddTickets** and **SetSelectedSeats** endpoints.\r\nAdding concessions will still require the use of the **AddConcessions** endpoint.\r\n\r\n### Seat-first Ordering\r\n\r\nWhen selecting seats first before tickets in an order:\r\n\r\n1. Pass in tickets which only include the seats to be reserved to this endpoint. The TicketDetails object can not be included in these tickets.\r\n2. Make a second call to this endpoint with the same seats and the selected ticket types to assign the tickets to those seats.\r\n\r\n### Ticket-first Ordering\r\n\r\nWhen selecting tickets first before seats in an order:\r\n\r\n1. Pass in the selected tickets to the endpoint. This will auto allocate seats similar to the **AddTickets** endpoint.\r\n2. An optional call can be made with the same tickets and different seats to assign the tickets to new seats, similar to the **SetSelectedSeats** endpoint.\r\n\r\n### Other Notes\r\n\r\n- Seats and tickets can also be set at the same time in a single call if preferred.\r\n- When passing tickets to the endpoint there must either be no seats or the same number of seats as tickets. Assigning tickets to only some seats is not supported.\r\n- To change the seats or tickets on the order pass in the new combination of seats and tickets, any seats/tickets no longer requested will be removed from the order.\r\nThis can be used to change tickets, seats, or tickets and seats at the same time.\r\n- An order can also be cleared of seats or tickets by passing in no tickets/ticket details.\r\n- When adding vouchers to an order, a ticket type is required when seats being passed to the endpoint. If ordering seat first, the ticket types for a voucher barcode \r\ncan be retrieved from the GetTicketsForBarcode (/RESTData.svc/cinemas/{cinemaId}/sessions/{sessionId}/tickets-for-barcode) endpoint. If ordering ticket first, the \r\nbarcode can be passed in alone and the linked TicketTypeCode will be returned.\r\n\r\nThe following error codes are returned in the response body\r\n\r\n- **100** - The combination of seats and tickets are invalid.\r\n- **110** - The requested seats were already reserved.\r\n- **130** - One or more provided vouchers are invalid.\r\n- **140** - Third party member not found for third party member ticket.\r\n- **150** - A loyalty only ticket was specified but no loyalty member is logged in.\r\n- **151** - Loyalty recognition information (ID and sequence number) is invalid.\r\n- **160** - There are not enough seats available for requested tickets.",
+				"operationId": "SetTicketsForSession_SetTicketsForSession",
+				"consumes": ["application/x-www-form-urlencoded",
+				"application/json",
+				"text/json"],
+				"produces": ["application/json",
+				"text/json"],
+				"parameters": [{
+					"name": "userSessionId",
+					"in": "path",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"name": "sessionId",
+					"in": "path",
+					"required": true,
+					"type": "integer",
+					"format": "int32"
+				},
+				{
+					"name": "request",
+					"in": "body",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Request.SetTicketsForSessionRequest"
+					}
+				},
+				{
+					"name": "connectapitoken",
+					"in": "header",
+					"description": "Connect API token",
+					"required": false,
+					"type": "string"
+				}],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.SetTicketsForSessionResponse"
+						}
+					}
+				},
+				"deprecated": false
+			}
+		},
+		"/vouchers/{barcode}": {
+			"get": {
+				"tags": ["Vouchers"],
+				"summary": "Retrieves details of a voucher",
+				"description": "Returns the number of redemptions available for a voucher, along with others details. \r\nFor vouchers which can be used to make redemptions other than ticket or payment redemptions, this also returns deals which can be redeemed using this voucher.",
+				"operationId": "Vouchers_GetVoucherDetails",
+				"consumes": [],
+				"produces": ["application/json",
+				"text/json"],
+				"parameters": [{
+					"name": "barcode",
+					"in": "path",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"name": "connectapitoken",
+					"in": "header",
+					"description": "Connect API token",
+					"required": false,
+					"type": "string"
+				}],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Vouchers.GetVoucherDetailsResponse"
+						}
+					}
+				},
+				"deprecated": false
+			}
+		},
+		"/orders/{userSessionId}/deal-voucher": {
+			"post": {
+				"tags": ["Orders"],
+				"summary": "Applies a deal voucher to an order",
+				"description": "Adds a voucher to an order with a specified number of deal redemptions.\r\nThe voucher must be linked to a deal in Back Office to allow the deal to be applied to an order - the request will fail otherwise. Once the voucher is applied to an order, the deal can be applied to the order as many times as the number of redemptions specified in the **redemptions** parameter in the request.\r\nThe **useAllAvailableRedemptions** parameter in the request body can be set to 'true' to use all redemptions on the voucher. If this is set, the **redemptions** parameter is ignored.\r\n\r\nThe voucher will not be redeemed if the order did not fulfil the deal.",
+				"operationId": "Vouchers_ApplyDealVoucher",
+				"consumes": ["application/json",
+				"text/json",
+				"application/x-www-form-urlencoded"],
+				"produces": ["application/json",
+				"text/json"],
+				"parameters": [{
+					"name": "userSessionId",
+					"in": "path",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"name": "request",
+					"in": "body",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Vouchers.ApplyDealVoucherRequest"
+					}
+				},
+				{
+					"name": "connectapitoken",
+					"in": "header",
+					"description": "Connect API token",
+					"required": false,
+					"type": "string"
+				}],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/System.Object"
+						}
+					}
+				},
+				"deprecated": false
+			},
+			"delete": {
+				"tags": ["Orders"],
+				"summary": "Removes a deal voucher from an order",
+				"description": "This can be used to remove a specific number of deal redemptions for a voucher in an order, or remove the voucher entirely from an order.",
+				"operationId": "Vouchers_RemoveDealVoucher",
+				"consumes": ["application/json",
+				"text/json",
+				"application/x-www-form-urlencoded"],
+				"produces": ["application/json",
+				"text/json"],
+				"parameters": [{
+					"name": "userSessionId",
+					"in": "path",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"name": "request",
+					"in": "body",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Vouchers.RemoveDealVoucherRequest"
+					}
+				},
+				{
+					"name": "connectapitoken",
+					"in": "header",
+					"description": "Connect API token",
+					"required": false,
+					"type": "string"
+				}],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/System.Object"
+						}
+					}
+				},
+				"deprecated": false
+			}
+		}
+	},
+	"definitions": {
+		"Vista.Connect.WebApi.Contracts.Bookings.Refunds.RefundBookingRequest": {
+			"description": "Root request entity for Refund Booking",
+			"type": "object",
+			"properties": {
+				"refundReason": {
+					"description": "Reason for the refund (50 characters maximum)",
+					"type": "string"
+				},
+				"externalPaymentDetails": {
+					"description": "Payments made externally to Vista to be recorded as part of this refund",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Bookings.Refunds.ExternalRefundPayment"
+					}
+				},
+				"matchedPaymentDetails": {
+					"description": "Matched payments to be made via Vista as part of this refund",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Bookings.Refunds.MatchedRefundPayment"
+					}
+				},
+				"unmatchedPaymentDetails": {
+					"description": "Unmatched payments to be made via Vista as part of this refund",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Bookings.Refunds.UnmatchedRefundPayment"
+					}
+				},
+				"sequencesToRefund": {
+					"description": "List tickets, item and booking fee sequence numbers to refund. When no sequence numbers are provided all lines in booking will be refunded.\r\n            To refund packages and deals all sequence numbers must be provided (can be obtained by grouping by RefundGroup at GetSingleBooking endpoint).",
+					"type": "array",
+					"items": {
+						"format": "int32",
+						"type": "integer"
+					}
+				},
+				"isPriorDayRefund": {
+					"description": "True if the refund should be recorded as 'prior day' at the cinema. Used for reporting purposes",
+					"type": "boolean"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Bookings.Refunds.ExternalRefundPayment": {
+			"description": "Represents a payment to be processed/recorded as part of Refund Booking",
+			"required": ["amountInCents"],
+			"type": "object",
+			"properties": {
+				"amountInCents": {
+					"format": "int32",
+					"maximum": 2147483647,
+					"minimum": 0,
+					"type": "integer"
+				},
+				"cardType": {
+					"description": "Type of card. Used in reporting at a cinema to identify the cinema PaymetType to record the refund payment against. Will be overridden by CardType configured at cinema against Card Definition. e.g. VISTA, AMEX, LOYALTY, SVC",
+					"type": "string"
+				},
+				"cardNumberMasked": {
+					"description": "Card number used for payment in external system",
+					"type": "string"
+				},
+				"cardExpiryYear": {
+					"type": "string"
+				},
+				"cardExpiryMonth": {
+					"type": "string"
+				},
+				"cardValidFromYear": {
+					"type": "string"
+				},
+				"cardValidFromMonth": {
+					"type": "string"
+				},
+				"cardIssueNumber": {
+					"type": "string"
+				},
+				"paymentTenderCategory": {
+					"description": "Tender category. Used in reporting at a cinema to identify the cinema PaymentType to record the refund payment against. e.g. CREDIT, DEBIT, SVC, LOYALTY",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Bookings.Refunds.MatchedRefundPayment": {
+			"required": ["amountInCents",
+			"paymentId"],
+			"type": "object",
+			"properties": {
+				"amountInCents": {
+					"format": "int32",
+					"maximum": 2147483647,
+					"minimum": 0,
+					"type": "integer"
+				},
+				"paymentId": {
+					"description": "ID of original payment on order. ID can be found on on the Payment record returned in the GetBooking response.",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Bookings.Refunds.UnmatchedRefundPayment": {
+			"description": "Represents an unmatched refund payment. Card details will be used to perform the refund payment, but will not be associated with the original payment in the payment system.",
+			"required": ["amountInCents"],
+			"type": "object",
+			"properties": {
+				"amountInCents": {
+					"format": "int32",
+					"maximum": 2147483647,
+					"minimum": 0,
+					"type": "integer"
+				},
+				"cardType": {
+					"description": "Type of card. Used in reporting at a cinema to identify the cinema PaymetType to record the refund payment against. Will be overridden by CardType configured at cinema against Card Definition. e.g. VISTA, AMEX, LOYALTY, SVC",
+					"type": "string"
+				},
+				"cardNumber": {
+					"description": "The number of the card to use for the refund payment. If a masked card number is provided, this endpoint will attempt to use the token associated with the card from the original order to process the refund payment",
+					"type": "string"
+				},
+				"cardCVC": {
+					"type": "string"
+				},
+				"cardExpiryYear": {
+					"type": "string"
+				},
+				"cardExpiryMonth": {
+					"type": "string"
+				},
+				"cardValidFromYear": {
+					"type": "string"
+				},
+				"cardValidFromMonth": {
+					"type": "string"
+				},
+				"cardIssueNumber": {
+					"type": "string"
+				},
+				"paymentTenderCategory": {
+					"description": "Tender category. Used in reporting at a cinema to identify the cinema PaymentType to record the refund payment against. e.g. CREDIT, DEBIT, SVC, LOYALTY",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.GetOrderResponse": {
+			"type": "object",
+			"properties": {
+				"order": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.Order"
+				},
+				"suggestedDeals": {
+					"description": "Suggested deals for the order.",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/WSVistaWebClient.ServiceContracts.Deals.DealSuggestion"
+					}
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.Order": {
+			"type": "object",
+			"properties": {
+				"cinemaId": {
+					"description": "Cinema Id",
+					"type": "string"
+				},
+				"userSessionId": {
+					"description": "Unique Identifier for the order",
+					"type": "string"
+				},
+				"orderTotalValueInCents": {
+					"format": "int32",
+					"description": "The value of all items in the order (including fees and concessions) in cents",
+					"type": "integer"
+				},
+				"bookingFeeTotalValueInCents": {
+					"format": "int32",
+					"description": "The value of the booking fees for the order.",
+					"type": "integer"
+				},
+				"loyaltyPointsTotalCost": {
+					"description": "The total amount of loyalty points being used in this order, per points type",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderLoyaltyPointsCost"
+					}
+				},
+				"sessions": {
+					"description": "List of tickets and seats per session that are currently on the order",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderSession"
+					}
+				},
+				"concessions": {
+					"description": "The concessions that have been added to this order",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderConcession"
+					}
+				},
+				"appliedGiftCards": {
+					"description": "Gift cards that have been applied to the order",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderAppliedGiftCard"
+					}
+				},
+				"expiryDateUtc": {
+					"format": "date-time",
+					"description": "The UTC time after which this order can be cancelled by background clean-up tasks. This value can be reset by any action on the order or by the ResetOrderExpiry end-point.",
+					"type": "string"
+				},
+				"hasCardPaymentPromotionTickets": {
+					"description": "Indicates whether the order has any tickets which are restricted to card promotions\r\n            If true then the order can only be paid for by cards matching those in PromotionCards",
+					"type": "boolean"
+				},
+				"promotionCards": {
+					"description": "List of cards that can be used to pay for the order due to card payment promotion ticket restrictions",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderPromotionCard"
+					}
+				}
+			}
+		},
+		"WSVistaWebClient.ServiceContracts.Deals.DealSuggestion": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"description": "Deal identifier",
+					"type": "string"
+				},
+				"description": {
+					"description": "Description of the deal.",
+					"type": "string"
+				},
+				"isSeasonPass": {
+					"description": "If the deal is associated with a Season Pass.",
+					"type": "boolean"
+				},
+				"isTicketUpgrade": {
+					"description": "True if the deal is a ticket upgrade.",
+					"type": "boolean"
+				},
+				"limitPerOrder": {
+					"format": "int32",
+					"description": "Number of deals permitted in the order. Null or 0 is unlimited.",
+					"type": "integer"
+				},
+				"requiresLoyalty": {
+					"description": "True if the deal requires loyalty membership.",
+					"type": "boolean"
+				},
+				"requiresVoucher": {
+					"description": "True if the deal requres a voucher.",
+					"type": "boolean"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderLoyaltyPointsCost": {
+			"type": "object",
+			"properties": {
+				"balanceTypeId": {
+					"format": "int32",
+					"description": "The ID of the points type",
+					"type": "integer"
+				},
+				"points": {
+					"format": "double",
+					"description": "The number of points to be subtracted from the balance",
+					"type": "number"
+				},
+				"balanceTypeName": {
+					"description": "The name of the points type",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderSession": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"format": "int32",
+					"description": "The unique identifier of the session",
+					"type": "integer"
+				},
+				"filmTitle": {
+					"description": "The title of the film for the session",
+					"type": "string"
+				},
+				"filmClassification": {
+					"description": "The classification of the film for the session",
+					"type": "string"
+				},
+				"startTime": {
+					"format": "date-time",
+					"description": "The session showing time in the Cinema's local time, useful for display purposes",
+					"type": "string"
+				},
+				"allocatedSeating": {
+					"description": "Whether the session has allocated seating. True if the session has allocated seating, false otherwise",
+					"type": "boolean"
+				},
+				"tickets": {
+					"description": "A list of tickets for this session that are currently in the order",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderTicket"
+					}
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderConcession": {
+			"type": "object",
+			"properties": {
+				"itemId": {
+					"description": "The ID of the concession item at Cinema",
+					"type": "string"
+				},
+				"description": {
+					"description": "The human-friendly description of the concession",
+					"type": "string"
+				},
+				"finalPriceInCents": {
+					"format": "int32",
+					"description": "The price of the concession taking all deals and discounts into account, in cents",
+					"type": "integer"
+				},
+				"originalPriceInCents": {
+					"format": "int32",
+					"description": "The price in cents for the concession before deals and discounts are applied, in cents",
+					"type": "integer"
+				},
+				"loyaltyRecognitionId": {
+					"format": "int32",
+					"description": "Recognition ID of the Loyalty recognition used to purchase this concession, if any",
+					"type": "integer"
+				},
+				"loyaltyRecognitionSequence": {
+					"format": "int32",
+					"description": "Loyalty recognition sequence number. Identifies instance of a loyalty recognition if the same recognition has been redeemed multiple times",
+					"type": "integer"
+				},
+				"dealDefinitionId": {
+					"description": "The ID for the deal applied to this concession",
+					"type": "string"
+				},
+				"dealDescription": {
+					"description": "The description for the deal applied to this concession",
+					"type": "string"
+				},
+				"dealSequence": {
+					"format": "int32",
+					"description": "If the same deal has been applied to the order multiple times, the DealSequence will show which items belong to which instance of the deal",
+					"type": "integer"
+				},
+				"childConcessions": {
+					"description": "If the concession item is a package, the items that make up the package. Note that child items are only returned if they are provided to\r\n            the AddConcessions endpoint",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderPackageConcession"
+					}
+				},
+				"modifiers": {
+					"description": "Modifiers applied to the concession",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderConcessionModifier"
+					}
+				},
+				"delivery": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderConcessionDeliveryInfo",
+					"description": "Delivery information for this concession. If no delivery information is present the concession is to be picked up at the Cinema"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderAppliedGiftCard": {
+			"type": "object",
+			"properties": {
+				"maskedCardNumber": {
+					"description": "The masked card number of the applied gift card",
+					"type": "string"
+				},
+				"deductedAmountInCents": {
+					"format": "int32",
+					"description": "The amount to be deducted from the card, in cents",
+					"type": "integer"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderPromotionCard": {
+			"type": "object",
+			"properties": {
+				"cardDefinitionId": {
+					"description": "The id of the card definition",
+					"type": "string"
+				},
+				"cardType": {
+					"description": "The card type of the card definition",
+					"type": "string"
+				},
+				"brandName": {
+					"description": "The brand of the card definition",
+					"type": "string"
+				},
+				"rangeStart": {
+					"format": "int32",
+					"description": "The start range for card numbers in this card definition",
+					"type": "integer"
+				},
+				"rangeEnd": {
+					"format": "int32",
+					"description": "The end range for card numbers in this card definition",
+					"type": "integer"
+				},
+				"subBrandId": {
+					"format": "int32",
+					"description": "The id of the sub brand if this OrderPromotionCard has one",
+					"type": "integer"
+				},
+				"subBrandName": {
+					"description": "The name of the sub brand",
+					"type": "string"
+				},
+				"subBrandDigits": {
+					"description": "The digits for the sub brand",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderTicket": {
+			"description": "A representation of a ticket which is currently on an order",
+			"type": "object",
+			"properties": {
+				"ticketDetails": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderTicketDetails",
+					"description": "The metadata of the ticket"
+				},
+				"seats": {
+					"description": "The seat (or seats in the case of package tickets) this ticket is assigned to.",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderSeat"
+					}
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderPackageConcession": {
+			"description": "A concession that is part of a package (either concession or ticket package)",
+			"type": "object",
+			"properties": {
+				"itemId": {
+					"description": "The ID of the concession item at Cinema",
+					"type": "string"
+				},
+				"description": {
+					"description": "The human-friendly description of the concession",
+					"type": "string"
+				},
+				"finalPriceInCents": {
+					"format": "int32",
+					"description": "The price of the concession taking all deals and discounts into account, in cents",
+					"type": "integer"
+				},
+				"originalPriceInCents": {
+					"format": "int32",
+					"description": "The price in cents for the concession before deals and discounts are applied, in cents",
+					"type": "integer"
+				},
+				"dealDefinitionId": {
+					"description": "The ID for the deal applied to this concession",
+					"type": "string"
+				},
+				"dealDescription": {
+					"description": "The description for the deal applied to this concession",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderConcessionModifier": {
+			"type": "object",
+			"properties": {
+				"modifierId": {
+					"description": "ID of the modifier item at cinema",
+					"type": "string"
+				},
+				"description": {
+					"description": "Description of the modifier",
+					"type": "string"
+				},
+				"finalPriceInCents": {
+					"format": "int32",
+					"description": "Price of the modifier in cents",
+					"type": "integer"
+				},
+				"quantity": {
+					"format": "int32",
+					"description": "Quantity of the modifier applied to the concession",
+					"type": "integer"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderConcessionDeliveryInfo": {
+			"description": "The delivery information associated with an item",
+			"type": "object",
+			"properties": {
+				"inSeatDelivery": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderInSeatDeliveryInfo",
+					"description": "In-seat delivery info if the concession is to be delivered to the customer's seat"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderTicketDetails": {
+			"type": "object",
+			"properties": {
+				"ticketId": {
+					"format": "int32",
+					"description": "ID of the ticket in Connect",
+					"type": "integer"
+				},
+				"ticketTypeCode": {
+					"description": "Primary identifier of the ticket type this item represents",
+					"type": "string"
+				},
+				"description": {
+					"description": "Human-friendly ticket type description",
+					"type": "string"
+				},
+				"finalPriceInCents": {
+					"format": "int32",
+					"description": "The price of the ticket taking all deals and discounts into account, in cents",
+					"type": "integer"
+				},
+				"originalPriceInCents": {
+					"format": "int32",
+					"description": "The price in cents for the ticket before deals and discounts are applied",
+					"type": "integer"
+				},
+				"voucherBarcode": {
+					"description": "The barcode of a voucher-based ticket",
+					"type": "string"
+				},
+				"loyaltyRecognitionId": {
+					"description": "Recognition ID of the Loyalty recognition used to purchase this ticket, if any",
+					"type": "string"
+				},
+				"loyaltyRecognitionSequence": {
+					"format": "int32",
+					"description": "Loyalty recognition sequence number. Identifies instance of a loyalty recognition if the same recognition has been redeemed multiple times",
+					"type": "integer"
+				},
+				"dealDefinitionId": {
+					"description": "The ID for the deal applied to this ticket",
+					"type": "string"
+				},
+				"dealDescription": {
+					"description": "The description for the deal applied to this ticket",
+					"type": "string"
+				},
+				"dealSequence": {
+					"format": "int32",
+					"description": "If the same deal has been applied to the order multiple times, the DealSequence will show which items belong to which instance of the deal",
+					"type": "integer"
+				},
+				"isTicketPackage": {
+					"description": "Indicates whether the ticket is a ticket package. True if the ticket is a ticket package, false otherwise",
+					"type": "boolean"
+				},
+				"childTickets": {
+					"description": "Tickets that make up a package ticket",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderPackageTicket"
+					}
+				},
+				"childConcessions": {
+					"description": "Concessions that make up a package ticket",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderPackageConcession"
+					}
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderSeat": {
+			"type": "object",
+			"properties": {
+				"areaCategoryCode": {
+					"description": "The primary identifier of the area category for the seat's area",
+					"type": "string"
+				},
+				"areaNumber": {
+					"format": "int32",
+					"description": "The number of the seat's area",
+					"type": "integer"
+				},
+				"rowIndex": {
+					"format": "int32",
+					"description": "The zero-based grid number of the seat's row",
+					"type": "integer"
+				},
+				"columnIndex": {
+					"format": "int32",
+					"description": "The zero-based grid number of the seat's column",
+					"type": "integer"
+				},
+				"rowDisplay": {
+					"description": "Human-friendly representation of the row",
+					"type": "string"
+				},
+				"columnDisplay": {
+					"description": "Human-friendly representation of the column",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderInSeatDeliveryInfo": {
+			"description": "Information relating to an in seat delivery",
+			"type": "object",
+			"properties": {
+				"sessionId": {
+					"description": "The session the item is to be delivered to",
+					"type": "string"
+				},
+				"seat": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.OrderInSeatDeliverySeat",
+					"description": "The seat the item is to be delivered to"
+				},
+				"comment": {
+					"description": "A patron comment associated with the delivery",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderPackageTicket": {
+			"description": "A ticket that is part of a package",
+			"type": "object",
+			"properties": {
+				"ticketTypeCode": {
+					"description": "Primary identifier of the ticket type this item represents",
+					"type": "string"
+				},
+				"description": {
+					"description": "Human-friendly ticket type description",
+					"type": "string"
+				},
+				"finalPriceInCents": {
+					"format": "int32",
+					"description": "The price of the ticket taking all deals and discounts into account, in cents",
+					"type": "integer"
+				},
+				"originalPriceInCents": {
+					"format": "int32",
+					"description": "The price in cents for the ticket before deals and discounts are applied",
+					"type": "integer"
+				},
+				"dealDefinitionId": {
+					"description": "The ID for the deal applied to this ticket",
+					"type": "string"
+				},
+				"dealDescription": {
+					"description": "The description for the deal applied to this ticket",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.OrderInSeatDeliverySeat": {
+			"description": "In-seat delivery info only has display representation of the seat at the moment",
+			"type": "object",
+			"properties": {
+				"rowDisplay": {
+					"description": "Human-friendly representation of the row",
+					"type": "string"
+				},
+				"columnDisplay": {
+					"description": "Human-friendly representation of the column",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Request.CreateOrderRequest": {
+			"required": ["cinemaId"],
+			"type": "object",
+			"properties": {
+				"cinemaId": {
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.CreateOrderResponse": {
+			"type": "object",
+			"properties": {
+				"order": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.Order"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Request.SetTicketsForSessionRequest": {
+			"description": "Root request entity for Set Tickets For Session",
+			"required": ["tickets"],
+			"type": "object",
+			"properties": {
+				"tickets": {
+					"description": "List of tickets to be added to order",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Request.Ticket"
+					}
+				},
+				"bookingFeeOverrideInCents": {
+					"format": "int32",
+					"description": "Booking fee override value in cents",
+					"type": "integer"
+				},
+				"bookingMode": {
+					"format": "int32",
+					"description": "Booking mode for determBooking Fees at sales server\r\n            0 = Paid\r\n            1 = Unpaid\r\n            2 = Zero Value\r\n            3 = Confirmed unpaid booking",
+					"type": "integer"
+				},
+				"useSeatAutoAllocation": {
+					"description": "Default is true. \r\n            If true seat auto allocation will be attempted. \r\n            If it fails to allocate contiguous block there will be no seats in response. \r\n            In this case seats must be provided manually in another call to SetTickets.\r\n            If false and only passing in ticket details, no seats will be automatically allocated\r\n            to the added tickets. SetTickets will have to be called again with the seats\r\n            to be allocated to the tickets.",
+					"type": "boolean"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Request.Ticket": {
+			"description": "Representation of tickets to be added to an order",
+			"type": "object",
+			"properties": {
+				"ticketDetails": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Request.TicketDetails",
+					"description": "The details of the ticket"
+				},
+				"seats": {
+					"description": "Seats to be assigned to this ticket",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Request.Seat"
+					}
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Request.TicketDetails": {
+			"description": "The details of the ticket used to determine ticket price and seating validity",
+			"type": "object",
+			"properties": {
+				"ticketTypeCode": {
+					"description": "The ticket type code of the ticket",
+					"type": "string"
+				},
+				"priceInCents": {
+					"format": "int32",
+					"description": "Value of Ticket Type (including taxes) in cents",
+					"type": "integer"
+				},
+				"voucherBarcode": {
+					"description": "If ticket is being requested with a voucher specify voucher barcode here",
+					"type": "string"
+				},
+				"voucherBarcodePin": {
+					"description": "Pin number associated with the voucher barcode",
+					"type": "string"
+				},
+				"voucherAreaCategoryCode": {
+					"description": "If a voucher is valid for multiple area categories the one in use must be specified here",
+					"type": "string"
+				},
+				"bookingFeeOverrideInCents": {
+					"format": "int32",
+					"description": "Overrides the default booking fee value, in cents",
+					"type": "integer"
+				},
+				"thirdPartyMemberScheme": {
+					"$ref": "#/definitions/WSVistaWebClient.ServiceContracts.ThirdPartyMemberScheme",
+					"description": "Third party member scheme to specify member ticket parameters"
+				},
+				"loyaltyRecognitionId": {
+					"description": "When a loyalty recognition acts on a specific ticket type enter the recognition ID here",
+					"type": "string"
+				},
+				"loyaltyRecognitionSequence": {
+					"format": "int32",
+					"description": "Loyalty recognition sequence number used to identify instance of recognition",
+					"type": "integer"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Request.Seat": {
+			"description": "Representation of a seat to be set",
+			"required": ["areaNumber",
+			"rowIndex",
+			"columnIndex"],
+			"type": "object",
+			"properties": {
+				"areaNumber": {
+					"format": "int32",
+					"description": "The number of the seat's area",
+					"type": "integer"
+				},
+				"rowIndex": {
+					"format": "int32",
+					"description": "The zero based row number of the seat",
+					"type": "integer"
+				},
+				"columnIndex": {
+					"format": "int32",
+					"description": "The zero based column number of the seat",
+					"type": "integer"
+				}
+			}
+		},
+		"WSVistaWebClient.ServiceContracts.ThirdPartyMemberScheme": {
+			"type": "object",
+			"properties": {
+				"memberCard": {
+					"description": "The card number that the tickets contained with this request are for.",
+					"type": "string"
+				},
+				"memberDateOfBirth": {
+					"format": "date-time",
+					"description": "Optional. The date of birth of the member.",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Orders.Response.SetTicketsForSessionResponse": {
+			"description": "Root response entity for Set Tickets For Session",
+			"type": "object",
+			"properties": {
+				"order": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Orders.Response.Order",
+					"description": "The current order"
+				},
+				"suggestedDeals": {
+					"description": "Suggested deals for the order.",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/WSVistaWebClient.ServiceContracts.Deals.DealSuggestion"
+					}
+				}
+			}
+		},
+		"System.Object": {
+			"type": "object",
+			"properties": {
+				
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Vouchers.GetVoucherDetailsResponse": {
+			"description": "The details of a voucher and what it can be redeemed for",
+			"type": "object",
+			"properties": {
+				"id": {
+					"description": "The barcode of the voucher",
+					"type": "string"
+				},
+				"code": {
+					"description": "The code of the voucher type",
+					"type": "string"
+				},
+				"typeName": {
+					"description": "The name of the voucher type",
+					"type": "string"
+				},
+				"ticketRedemptions": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Vouchers.TicketRedemptionInfo",
+					"description": "The ticket redemptions available"
+				},
+				"paymentRedemptions": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Vouchers.PaymentRedemptionInfo",
+					"description": "The payment redemptions available"
+				},
+				"miscellaneousRedemptions": {
+					"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Vouchers.MiscellaneousRedemptionInfo",
+					"description": "Available redemptions that don't fall under the ticket or payment redemption category"
+				},
+				"status": {
+					"description": "The status of the voucher",
+					"enum": ["NotIssued",
+					"Issued",
+					"IssueRefunded",
+					"Redeemed",
+					"RedeemRefunded",
+					"PartiallyRedeemed",
+					"Expired",
+					"Unknown"],
+					"type": "string"
+				},
+				"validFromDateTime": {
+					"format": "date-time",
+					"description": "The date from which the voucher is valid from",
+					"type": "string"
+				},
+				"expiryDateTime": {
+					"format": "date-time",
+					"description": "The date at which the voucher expires",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Vouchers.TicketRedemptionInfo": {
+			"description": "Information on how many redemptions and what options are available for ticket redemption",
+			"type": "object",
+			"properties": {
+				"available": {
+					"format": "int32",
+					"description": "The remaining redemptions for this redemption type",
+					"type": "integer"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Vouchers.PaymentRedemptionInfo": {
+			"description": "Information on how many redemptions and what options are available for payment redemption",
+			"type": "object",
+			"properties": {
+				"available": {
+					"format": "int32",
+					"description": "The remaining redemptions for this redemption type",
+					"type": "integer"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Vouchers.MiscellaneousRedemptionInfo": {
+			"description": "Information on how many redemptions and what options are available for miscellaneous redemptions",
+			"type": "object",
+			"properties": {
+				"available": {
+					"format": "int32",
+					"description": "The remaining redemptions for this redemption type",
+					"type": "integer"
+				},
+				"deals": {
+					"description": "A list of deals available for a miscellaneous redemption of this voucher",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Vista.Connect.WebApi.Contracts.Vouchers.VoucherDeal"
+					}
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Vouchers.VoucherDeal": {
+			"description": "A deal exclusive to a voucher",
+			"type": "object",
+			"properties": {
+				"id": {
+					"description": "The ID of the deal definition",
+					"type": "string"
+				},
+				"cinemaIds": {
+					"description": "A set of cinema IDs where this deal is available",
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"description": {
+					"description": "The description of the deal definition",
+					"type": "string"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Vouchers.ApplyDealVoucherRequest": {
+			"description": "A request to add a deal voucher to an order with a number of redemptions",
+			"required": ["barcode",
+			"dealDefinitionId"],
+			"type": "object",
+			"properties": {
+				"barcode": {
+					"description": "Barcode of the voucher to add to the order",
+					"type": "string"
+				},
+				"dealDefinitionId": {
+					"description": "The ID of the deal to be applied using this voucher",
+					"type": "string"
+				},
+				"redemptions": {
+					"format": "int32",
+					"description": "The number of miscellaneous redemptions to use. If not specified, defaults to 1 unless {Vista.Connect.WebApi.Contracts.Vouchers.ApplyDealVoucherRequest.UseAllAvailableRedemptions} is set",
+					"type": "integer"
+				},
+				"useAllAvailableRedemptions": {
+					"description": "If specified, {Vista.Connect.WebApi.Contracts.Vouchers.ApplyDealVoucherRequest.Redemptions} is ignored and all available miscellaneous redemptions on the voucher will be used",
+					"type": "boolean"
+				}
+			}
+		},
+		"Vista.Connect.WebApi.Contracts.Vouchers.RemoveDealVoucherRequest": {
+			"description": "A request to remove a deal voucher from an order",
+			"required": ["barcode",
+			"dealDefinitionId"],
+			"type": "object",
+			"properties": {
+				"barcode": {
+					"description": "Barcode of the voucher to be removed.",
+					"type": "string"
+				},
+				"dealDefinitionId": {
+					"description": "The ID of the deal to be removed for this voucher",
+					"type": "string"
+				},
+				"redemptions": {
+					"format": "int32",
+					"description": "The number of miscellaneous redemptions to remove. If not specified, all redemptions are removed",
+					"type": "integer"
+				}
+			}
+		}
+	}
+}
